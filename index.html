@@ -1,0 +1,995 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tradewind Group</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    /* ===== RESET & BASE ===== */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #0d1520;
+      color: #f1faee;
+      line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ===== COLOR TOKENS ===== */
+    :root {
+      --navy:       #0d1520;
+      --navy-mid:   #1a2332;
+      --navy-light: #243044;
+      --teal:       #2d8b8b;
+      --teal-light: #3aafaf;
+      --seafoam:    #a8dadc;
+      --gold:       #c9a84c;
+      --gold-light: #e4c97e;
+      --cream:      #f1faee;
+      --muted:      #8a9bb0;
+    }
+
+    /* ===== TYPOGRAPHY ===== */
+    h1, h2, h3, h4 {
+      font-family: 'Cinzel', serif;
+      letter-spacing: 0.05em;
+    }
+    .label {
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--teal-light);
+    }
+
+    /* ===== LAYOUT ===== */
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 2rem;
+    }
+    section { padding: 100px 0; }
+
+    /* ===== BUTTONS ===== */
+    .btn {
+      display: inline-block;
+      padding: 0.85rem 2.2rem;
+      border-radius: 3px;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      text-decoration: none;
+      cursor: pointer;
+      transition: all 0.25s ease;
+    }
+    .btn-primary {
+      background: var(--gold);
+      color: var(--navy);
+      border: 2px solid var(--gold);
+    }
+    .btn-primary:hover {
+      background: var(--gold-light);
+      border-color: var(--gold-light);
+      transform: translateY(-1px);
+    }
+    .btn-outline {
+      background: transparent;
+      color: var(--cream);
+      border: 2px solid rgba(241,250,238,0.4);
+    }
+    .btn-outline:hover {
+      border-color: var(--cream);
+      transform: translateY(-1px);
+    }
+
+    /* ===== DIVIDER ===== */
+    .divider {
+      width: 60px;
+      height: 2px;
+      background: var(--gold);
+      margin: 1.2rem 0 1.8rem;
+    }
+    .divider.center { margin-left: auto; margin-right: auto; }
+
+    /* ===== NAV ===== */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      padding: 1.2rem 0;
+      transition: background 0.3s ease, padding 0.3s ease;
+    }
+    nav.scrolled {
+      background: rgba(13,21,32,0.97);
+      padding: 0.8rem 0;
+      border-bottom: 1px solid rgba(45,139,139,0.2);
+    }
+    nav .container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .nav-logo {
+      font-family: 'Cinzel', serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      color: var(--cream);
+      text-decoration: none;
+    }
+    .nav-logo span { color: var(--gold); }
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+      list-style: none;
+    }
+    .nav-links a {
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: rgba(241,250,238,0.75);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--cream); }
+    .nav-links .nav-cta a {
+      color: var(--gold);
+      border: 1px solid var(--gold);
+      padding: 0.45rem 1.1rem;
+      border-radius: 2px;
+    }
+    .nav-links .nav-cta a:hover { background: var(--gold); color: var(--navy); }
+
+    /* Hamburger */
+    .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; }
+    .hamburger span { display: block; width: 24px; height: 2px; background: var(--cream); transition: all 0.3s; }
+
+    /* ===== HERO ===== */
+    #hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+      padding: 0;
+    }
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, #0a1018 0%, #1a2d3e 50%, #0d2030 100%);
+    }
+    .hero-grid {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(45,139,139,0.06) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(45,139,139,0.06) 1px, transparent 1px);
+      background-size: 60px 60px;
+    }
+    .hero-glow {
+      position: absolute;
+      top: 20%;
+      right: 10%;
+      width: 500px;
+      height: 500px;
+      background: radial-gradient(circle, rgba(45,139,139,0.12) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      max-width: 720px;
+    }
+    .hero-content .label { margin-bottom: 1.5rem; }
+    .hero-content h1 {
+      font-size: clamp(2.6rem, 6vw, 4.2rem);
+      line-height: 1.1;
+      color: var(--cream);
+      margin-bottom: 0.5rem;
+    }
+    .hero-content h1 .accent { color: var(--gold); }
+    .hero-tagline {
+      font-size: 1.15rem;
+      color: var(--seafoam);
+      margin: 1rem 0 0.5rem;
+      font-weight: 300;
+      letter-spacing: 0.02em;
+    }
+    .hero-sub {
+      font-size: 1rem;
+      color: var(--muted);
+      margin-bottom: 2.5rem;
+      max-width: 520px;
+    }
+    .hero-badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+      margin-bottom: 2.5rem;
+    }
+    .hero-badge {
+      font-size: 0.7rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 0.4rem 1rem;
+      border: 1px solid rgba(168,218,220,0.25);
+      border-radius: 2px;
+      color: var(--seafoam);
+      background: rgba(168,218,220,0.05);
+    }
+    .hero-cta { display: flex; gap: 1rem; flex-wrap: wrap; }
+
+    /* ===== LOGO PLACEHOLDER ===== */
+    .logo-placeholder {
+      width: 60px;
+      height: 60px;
+      background: rgba(201,168,76,0.15);
+      border: 1px solid rgba(201,168,76,0.3);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Cinzel', serif;
+      font-size: 1.2rem;
+      color: var(--gold);
+      font-weight: 700;
+      text-decoration: none;
+    }
+    /* Image slot for logo */
+    .logo-img {
+      height: 44px;
+      width: auto;
+      display: block;
+    }
+
+    /* ===== MEMBERSHIPS ===== */
+    #memberships { background: var(--navy-mid); }
+    #memberships .section-header { text-align: center; margin-bottom: 3.5rem; }
+    #memberships h2 { font-size: clamp(1.8rem, 4vw, 2.6rem); }
+    #memberships .section-intro {
+      max-width: 580px;
+      margin: 0 auto;
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+    .plan-tabs {
+      display: flex;
+      justify-content: center;
+      gap: 0;
+      margin-bottom: 3rem;
+      border: 1px solid rgba(45,139,139,0.3);
+      border-radius: 4px;
+      overflow: hidden;
+      width: fit-content;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .plan-tab {
+      padding: 0.6rem 2rem;
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      cursor: pointer;
+      color: var(--muted);
+      background: transparent;
+      border: none;
+      transition: all 0.2s;
+    }
+    .plan-tab.active, .plan-tab:hover {
+      background: var(--teal);
+      color: var(--cream);
+    }
+    .plans-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1.5rem;
+    }
+    .plan-card {
+      background: var(--navy-light);
+      border: 1px solid rgba(45,139,139,0.15);
+      border-radius: 4px;
+      padding: 2.5rem 2rem;
+      position: relative;
+      transition: border-color 0.25s, transform 0.25s;
+    }
+    .plan-card:hover {
+      border-color: rgba(45,139,139,0.5);
+      transform: translateY(-3px);
+    }
+    .plan-card.featured {
+      border-color: var(--gold);
+      background: linear-gradient(160deg, #243044 0%, #1e2d40 100%);
+    }
+    .plan-card.featured::before {
+      content: 'MOST POPULAR';
+      position: absolute;
+      top: -1px; right: 1.5rem;
+      background: var(--gold);
+      color: var(--navy);
+      font-size: 0.6rem;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      padding: 0.3rem 0.8rem;
+      border-radius: 0 0 3px 3px;
+    }
+    .plan-name {
+      font-family: 'Cinzel', serif;
+      font-size: 0.85rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--teal-light);
+      margin-bottom: 0.5rem;
+    }
+    .plan-price {
+      font-size: 2.4rem;
+      font-weight: 300;
+      color: var(--cream);
+      line-height: 1;
+      margin-bottom: 0.25rem;
+    }
+    .plan-price sup { font-size: 1.1rem; vertical-align: super; font-weight: 400; }
+    .plan-period { font-size: 0.8rem; color: var(--muted); margin-bottom: 2rem; }
+    .plan-features { list-style: none; margin-bottom: 2rem; }
+    .plan-features li {
+      font-size: 0.88rem;
+      color: rgba(241,250,238,0.8);
+      padding: 0.5rem 0;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+    .plan-features li::before {
+      content: '';
+      width: 5px; height: 5px;
+      border-radius: 50%;
+      background: var(--teal-light);
+      flex-shrink: 0;
+    }
+    .plan-features li:last-child { border-bottom: none; }
+
+    /* ===== FEATURES ===== */
+    #features { background: var(--navy); }
+    #features .section-header { margin-bottom: 4rem; }
+    #features h2 { font-size: clamp(1.8rem, 4vw, 2.6rem); }
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 2rem;
+    }
+    .feature-card {
+      padding: 2rem;
+      background: var(--navy-mid);
+      border: 1px solid rgba(45,139,139,0.12);
+      border-radius: 4px;
+      transition: border-color 0.25s;
+    }
+    .feature-card:hover { border-color: rgba(45,139,139,0.4); }
+    .feature-icon {
+      width: 44px;
+      height: 44px;
+      background: rgba(45,139,139,0.15);
+      border-radius: 3px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1.2rem;
+      font-size: 1.3rem;
+    }
+    .feature-card h3 {
+      font-size: 0.95rem;
+      color: var(--cream);
+      margin-bottom: 0.6rem;
+    }
+    .feature-card p {
+      font-size: 0.85rem;
+      color: var(--muted);
+      line-height: 1.65;
+    }
+
+    /* ===== ABOUT ===== */
+    #about { background: var(--navy-mid); }
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1.5fr;
+      gap: 5rem;
+      align-items: center;
+    }
+    .about-image-wrap {
+      position: relative;
+    }
+    .about-image-placeholder {
+      width: 100%;
+      aspect-ratio: 3/4;
+      background: var(--navy-light);
+      border: 1px solid rgba(45,139,139,0.2);
+      border-radius: 4px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0.75rem;
+      color: var(--muted);
+      font-size: 0.8rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+    .about-image-placeholder svg { opacity: 0.3; }
+    /* When you add a real photo: */
+    .about-image-wrap img {
+      width: 100%;
+      aspect-ratio: 3/4;
+      object-fit: cover;
+      border-radius: 4px;
+      display: block;
+    }
+    .about-accent {
+      position: absolute;
+      bottom: -1.5rem;
+      right: -1.5rem;
+      width: 140px;
+      height: 140px;
+      background: rgba(201,168,76,0.06);
+      border: 1px solid rgba(201,168,76,0.2);
+      border-radius: 3px;
+      z-index: -1;
+    }
+    .about-content .label { margin-bottom: 0.8rem; }
+    .about-content h2 {
+      font-size: clamp(1.8rem, 3vw, 2.4rem);
+      margin-bottom: 0;
+    }
+    .about-content h2 span { color: var(--gold); }
+    .about-content p {
+      color: rgba(241,250,238,0.75);
+      font-size: 0.95rem;
+      margin-top: 1.5rem;
+      line-height: 1.8;
+    }
+    .about-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+      margin-top: 2.5rem;
+    }
+    .stat-item { text-align: center; }
+    .stat-num {
+      font-family: 'Cinzel', serif;
+      font-size: 1.8rem;
+      color: var(--gold);
+      font-weight: 700;
+    }
+    .stat-label {
+      font-size: 0.7rem;
+      color: var(--muted);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-top: 0.2rem;
+    }
+
+    /* ===== TESTIMONIALS ===== */
+    #testimonials { background: var(--navy); }
+    #testimonials .section-header { text-align: center; margin-bottom: 4rem; }
+    #testimonials h2 { font-size: clamp(1.8rem, 4vw, 2.6rem); }
+    .testimonials-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1.5rem;
+    }
+    .testimonial-card {
+      background: var(--navy-mid);
+      border: 1px solid rgba(45,139,139,0.12);
+      border-radius: 4px;
+      padding: 2rem;
+      position: relative;
+    }
+    .testimonial-card::before {
+      content: '\201C';
+      position: absolute;
+      top: 1rem; left: 1.5rem;
+      font-size: 4rem;
+      font-family: Georgia, serif;
+      color: rgba(45,139,139,0.2);
+      line-height: 1;
+    }
+    .testimonial-text {
+      font-size: 0.9rem;
+      color: rgba(241,250,238,0.8);
+      line-height: 1.75;
+      margin-bottom: 1.5rem;
+      padding-top: 1.5rem;
+    }
+    .testimonial-author {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+    }
+    .author-avatar {
+      width: 38px; height: 38px;
+      border-radius: 50%;
+      background: var(--teal);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Cinzel', serif;
+      font-size: 0.85rem;
+      color: var(--cream);
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+    .author-name {
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--cream);
+      text-transform: capitalize;
+    }
+    .author-title {
+      font-size: 0.72rem;
+      color: var(--muted);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    /* ===== VOYAGE BANNER ===== */
+    #voyage {
+      background: linear-gradient(135deg, #0a1824 0%, #112233 100%);
+      border-top: 1px solid rgba(45,139,139,0.15);
+      border-bottom: 1px solid rgba(45,139,139,0.15);
+      text-align: center;
+      padding: 70px 0;
+    }
+    #voyage p {
+      font-family: 'Cinzel', serif;
+      font-size: clamp(1.2rem, 3vw, 1.8rem);
+      color: var(--seafoam);
+      letter-spacing: 0.08em;
+    }
+
+    /* ===== FOOTER ===== */
+    footer {
+      background: #080e17;
+      padding: 60px 0 30px;
+      border-top: 1px solid rgba(45,139,139,0.1);
+    }
+    .footer-top {
+      display: grid;
+      grid-template-columns: 1.5fr 1fr 1fr;
+      gap: 3rem;
+      margin-bottom: 3rem;
+    }
+    .footer-brand .nav-logo {
+      display: inline-block;
+      margin-bottom: 1rem;
+      font-size: 1rem;
+    }
+    .footer-brand p {
+      font-size: 0.82rem;
+      color: var(--muted);
+      line-height: 1.7;
+      max-width: 280px;
+    }
+    .footer-brand .email-link {
+      display: block;
+      margin-top: 1rem;
+      font-size: 0.82rem;
+      color: var(--teal-light);
+      text-decoration: none;
+    }
+    .footer-brand .email-link:hover { color: var(--seafoam); }
+    .footer-col h4 {
+      font-size: 0.7rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--cream);
+      margin-bottom: 1.2rem;
+    }
+    .footer-col ul { list-style: none; }
+    .footer-col ul li { margin-bottom: 0.65rem; }
+    .footer-col ul li a {
+      font-size: 0.82rem;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .footer-col ul li a:hover { color: var(--cream); }
+    .social-links {
+      display: flex;
+      gap: 0.8rem;
+      margin-top: 1rem;
+    }
+    .social-link {
+      width: 36px; height: 36px;
+      border: 1px solid rgba(45,139,139,0.3);
+      border-radius: 3px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      color: var(--muted);
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      transition: all 0.2s;
+    }
+    .social-link:hover {
+      border-color: var(--teal);
+      color: var(--teal-light);
+    }
+    .footer-bottom {
+      border-top: 1px solid rgba(255,255,255,0.05);
+      padding-top: 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+    .footer-bottom p {
+      font-size: 0.75rem;
+      color: rgba(138,155,176,0.6);
+    }
+
+    /* ===== SCROLL ANIMATIONS ===== */
+    .fade-up {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    .fade-up.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 900px) {
+      .about-grid { grid-template-columns: 1fr; gap: 3rem; }
+      .about-image-wrap { max-width: 320px; }
+      .footer-top { grid-template-columns: 1fr 1fr; }
+      .footer-brand { grid-column: 1 / -1; }
+    }
+    @media (max-width: 640px) {
+      section { padding: 70px 0; }
+      .nav-links { display: none; }
+      .nav-links.open {
+        display: flex;
+        flex-direction: column;
+        position: fixed;
+        inset: 0;
+        background: rgba(13,21,32,0.98);
+        align-items: center;
+        justify-content: center;
+        gap: 2rem;
+        z-index: 99;
+      }
+      .nav-links.open a { font-size: 1.1rem; }
+      .hamburger { display: flex; position: relative; z-index: 101; }
+      .footer-top { grid-template-columns: 1fr; }
+      .about-stats { grid-template-columns: repeat(3, 1fr); gap: 1rem; }
+      .hero-cta { flex-direction: column; }
+      .hero-cta .btn { text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav id="navbar">
+    <div class="container">
+      <a href="#" class="nav-logo">TRADEWIND <span>GROUP</span></a>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="#memberships">Memberships</a></li>
+        <li><a href="#features">Features</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#testimonials">Members</a></li>
+        <li class="nav-cta"><a href="https://whop.com/tradewindgroup/" target="_blank" rel="noopener">Join Us</a></li>
+      </ul>
+      <div class="hamburger" id="hamburger" onclick="toggleNav()" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+      </div>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section id="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-grid"></div>
+    <div class="hero-glow"></div>
+    <div class="container">
+      <div class="hero-content">
+        <p class="label">Tradewind Group</p>
+        <h1>DISCOVER THE<br><span class="accent">UNCHARTED</span></h1>
+        <p class="hero-tagline">Master Your Trading. Go Beyond Ordinary.</p>
+        <p class="hero-sub">Unlock your full potential in trading the financial markets.</p>
+        <div class="hero-badges">
+          <span class="hero-badge">Exclusive Market Insights</span>
+          <span class="hero-badge">VIP Trading Live</span>
+          <span class="hero-badge">Expert Strategies</span>
+          <span class="hero-badge">Supportive Community</span>
+        </div>
+        <div class="hero-cta">
+          <a href="https://whop.com/tradewindgroup/" target="_blank" rel="noopener" class="btn btn-primary">Join Us</a>
+          <a href="#memberships" class="btn btn-outline">View Memberships</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MEMBERSHIPS -->
+  <section id="memberships">
+    <div class="container">
+      <div class="section-header fade-up">
+        <p class="label">Choose Your Plan</p>
+        <div class="divider center"></div>
+        <h2>Memberships</h2>
+        <p class="section-intro" style="margin-top:1rem;">Connect with a thriving, engaged trading community designed to help you grow and reach your goals.</p>
+      </div>
+      <div class="plans-grid fade-up">
+        <div class="plan-card">
+          <p class="plan-name">Monthly</p>
+          <div class="plan-price"><sup>$</sup>——</div>
+          <p class="plan-period">per month &middot; cancel anytime</p>
+          <ul class="plan-features">
+            <li>Discord Community Access</li>
+            <li>Weekly Market Recap</li>
+            <li>Market Synopsis</li>
+            <li>Weekly Trade Log</li>
+            <li>Weekly Chartbook</li>
+            <li>Trader's Toolkit</li>
+          </ul>
+          <a href="https://whop.com/tradewindgroup/" target="_blank" rel="noopener" class="btn btn-outline" style="width:100%;text-align:center;">Get Started</a>
+        </div>
+        <div class="plan-card featured">
+          <p class="plan-name">Annual</p>
+          <div class="plan-price"><sup>$</sup>——</div>
+          <p class="plan-period">per year &middot; best value</p>
+          <ul class="plan-features">
+            <li>Discord Community Access</li>
+            <li>Weekly Market Recap</li>
+            <li>Market Synopsis</li>
+            <li>Weekly Trade Log</li>
+            <li>Weekly Chartbook</li>
+            <li>Trader's Toolkit</li>
+          </ul>
+          <a href="https://whop.com/tradewindgroup/" target="_blank" rel="noopener" class="btn btn-primary" style="width:100%;text-align:center;">Get Started</a>
+        </div>
+        <div class="plan-card">
+          <p class="plan-name">Lifetime</p>
+          <div class="plan-price"><sup>$</sup>——</div>
+          <p class="plan-period">one-time payment &middot; forever</p>
+          <ul class="plan-features">
+            <li>Discord Community Access</li>
+            <li>Weekly Market Recap</li>
+            <li>Market Synopsis</li>
+            <li>Weekly Trade Log</li>
+            <li>Weekly Chartbook</li>
+            <li>Trader's Toolkit</li>
+          </ul>
+          <a href="https://whop.com/tradewindgroup/" target="_blank" rel="noopener" class="btn btn-outline" style="width:100%;text-align:center;">Get Started</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURES -->
+  <section id="features">
+    <div class="container">
+      <div class="section-header fade-up">
+        <p class="label">What's Included</p>
+        <div class="divider"></div>
+        <h2>Membership Features</h2>
+      </div>
+      <div class="features-grid">
+        <div class="feature-card fade-up">
+          <div class="feature-icon">&#9741;</div>
+          <h3>Discord Access</h3>
+          <p>Real-time community, trade alerts, and direct access to active traders navigating the market alongside you.</p>
+        </div>
+        <div class="feature-card fade-up">
+          <div class="feature-icon">&#128200;</div>
+          <h3>Market Recap &amp; Synopsis</h3>
+          <p>Weekly breakdowns of what happened and why it matters. Context that keeps you oriented for the week ahead.</p>
+        </div>
+        <div class="feature-card fade-up">
+          <div class="feature-icon">&#128203;</div>
+          <h3>Trade Log</h3>
+          <p>Full transparency — every trade listed with detailed percent gains. You see exactly what was traded and how it performed.</p>
+        </div>
+        <div class="feature-card fade-up">
+          <div class="feature-icon">&#128444;</div>
+          <h3>Chartbook</h3>
+          <p>Weekly charts with top setups. Walk into every week with a clear view of the levels and structures that matter.</p>
+        </div>
+        <div class="feature-card fade-up">
+          <div class="feature-icon">&#127891;</div>
+          <h3>Trader's Toolkit</h3>
+          <p>Educational material built for real traders — clear, actionable, and focused on building a repeatable process.</p>
+        </div>
+        <div class="feature-card fade-up">
+          <div class="feature-icon">&#127758;</div>
+          <h3>Supportive Community</h3>
+          <p>A room full of traders here to grow. Beginner or seasoned, the standard is the same: process, discipline, transparency.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about">
+    <div class="container">
+      <div class="about-grid">
+        <div class="about-image-wrap fade-up">
+          <!-- Replace the placeholder below with an <img> tag once you have a photo -->
+          <div class="about-image-placeholder">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            <span>Photo Coming Soon</span>
+          </div>
+          <div class="about-accent"></div>
+        </div>
+        <div class="about-content fade-up">
+          <p class="label">Founder</p>
+          <div class="divider"></div>
+          <h2>Ryan <span>Mazelli</span></h2>
+          <p>Ryan has been passionate about the markets since 2005. Rumors of the Apple iPhone were circulating and Ryan started to learn how he could participate in speculating a company's future market value. After learning about fundamentals, he quickly saw the need to understand technical analysis.</p>
+          <p>In 2007, Ryan opened his first day trading margin account and has never looked back since. It's been quite the journey — trading around the world, starting new business ventures, and building a family who lives beyond ordinary.</p>
+          <div class="about-stats">
+            <div class="stat-item">
+              <div class="stat-num">20+</div>
+              <div class="stat-label">Years Trading</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-num">0DTE</div>
+              <div class="stat-label">Specialist</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-num">&#9650;</div>
+              <div class="stat-label">Live Every Week</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TESTIMONIALS -->
+  <section id="testimonials">
+    <div class="container">
+      <div class="section-header fade-up">
+        <p class="label">Straight From Our Members</p>
+        <div class="divider center"></div>
+        <h2>What People Are Saying</h2>
+      </div>
+      <div class="testimonials-grid">
+        <div class="testimonial-card fade-up">
+          <p class="testimonial-text">Tradewind Group has exceeded my expectations in every way. The level of detail in the discussions is unmatched. Whether you're a beginner or a seasoned trader, there's always something new to learn. The lead traders are top-notch — incredibly knowledgeable and extremely approachable. They take the time to answer questions and provide personalized feedback very quickly. Plus, the overall vibe is friendly and supportive.</p>
+          <div class="testimonial-author">
+            <div class="author-avatar">B</div>
+            <div>
+              <div class="author-name">Brenda</div>
+              <div class="author-title">Executive</div>
+            </div>
+          </div>
+        </div>
+        <div class="testimonial-card fade-up">
+          <p class="testimonial-text">Their system is pretty easy to follow and defines risk management for you. They also help with the mental toughness you need to make it. Truly a great room to be a part of. I didn't know much about trading options when I got into the market. Ryan walked me through it and now I have doubled my income, consistently, while still working full time. Thank you so much.</p>
+          <div class="testimonial-author">
+            <div class="author-avatar">S</div>
+            <div>
+              <div class="author-name">Sam</div>
+              <div class="author-title">Manager</div>
+            </div>
+          </div>
+        </div>
+        <div class="testimonial-card fade-up">
+          <p class="testimonial-text">The attention to detail in every trade analysis is impressive, and I love how the community emphasizes learning over quick profits. It's clear that the leaders are genuinely invested in helping everyone succeed — not just in making money, but in understanding the why behind each trade.</p>
+          <div class="testimonial-author">
+            <div class="author-avatar">N</div>
+            <div>
+              <div class="author-name">Neil</div>
+              <div class="author-title">Entrepreneur</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- VOYAGE BANNER -->
+  <section id="voyage">
+    <div class="container">
+      <p class="fade-up">Tradewind Group has been on a voyage.</p>
+    </div>
+  </section>
+
+  <!-- FOOTER CTA -->
+  <section style="background: var(--navy-mid); padding: 80px 0; text-align: center;">
+    <div class="container">
+      <p class="label fade-up">Ready to Begin?</p>
+      <div class="divider center fade-up"></div>
+      <h2 class="fade-up" style="font-size:clamp(1.8rem,4vw,2.8rem); margin-bottom:1.5rem;">We Are Here to Trade<br>for Tomorrow.</h2>
+      <a href="https://whop.com/tradewindgroup/" target="_blank" rel="noopener" class="btn btn-primary fade-up">Join Us</a>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="container">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <a href="#" class="nav-logo">TRADEWIND <span>GROUP</span></a>
+          <p>A nautical-themed trading community built on process, discipline, and transparency. We are here to trade for tomorrow.</p>
+          <a href="mailto:ryan@tradewind-group.com" class="email-link">ryan@tradewind-group.com</a>
+        </div>
+        <div class="footer-col">
+          <h4>Navigate</h4>
+          <ul>
+            <li><a href="#memberships">Memberships</a></li>
+            <li><a href="#features">Features</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#testimonials">Members</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Connect</h4>
+          <div class="social-links">
+            <a href="#" class="social-link" aria-label="Instagram">IG</a>
+            <a href="#" class="social-link" aria-label="Twitter/X">X</a>
+            <a href="#" class="social-link" aria-label="Facebook">FB</a>
+            <a href="#" class="social-link" aria-label="LinkedIn">LI</a>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 Tradewind Group. All rights reserved.</p>
+        <p>Built for traders who live beyond ordinary.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Nav scroll effect
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+      navbar.classList.toggle('scrolled', window.scrollY > 40);
+    });
+
+    // Mobile nav toggle
+    function toggleNav() {
+      document.getElementById('navLinks').classList.toggle('open');
+    }
+
+    // Close nav on link click
+    document.querySelectorAll('.nav-links a').forEach(link => {
+      link.addEventListener('click', () => {
+        document.getElementById('navLinks').classList.remove('open');
+      });
+    });
+
+    // Scroll fade-in animations
+    const fadeEls = document.querySelectorAll('.fade-up');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry, i) => {
+        if (entry.isIntersecting) {
+          setTimeout(() => entry.target.classList.add('visible'), i * 80);
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+    fadeEls.forEach(el => observer.observe(el));
+
+    // Stagger feature cards
+    document.querySelectorAll('.features-grid .fade-up, .plans-grid .fade-up, .testimonials-grid .fade-up').forEach((el, i) => {
+      el.style.transitionDelay = `${i * 0.1}s`;
+    });
+  </script>
+</body>
+</html>
